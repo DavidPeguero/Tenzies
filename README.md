@@ -1,3 +1,7 @@
+# Play the Game
+
+You can play the game [here](https://david-peguero-tenzies.netlify.app/)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
