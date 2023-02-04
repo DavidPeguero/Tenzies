@@ -4,13 +4,33 @@ import Confetti from 'react-confetti'
 
 function App() {
   const DIE_NUM = 10;
+  const TIMER_INTERVAL = 10;
   const [dice, setDice] = React.useState(() => newDice())
   const [tenzies, setTenzies] = React.useState(false)
 
+  //Timer states
+  const [time, setTime] = React.useState(0)
+  const [timerOn, setTimerOn] = React.useState(false)
+
   //Check for win condition and set win if achieved
-  React.useEffect(()=> {
+  React.useEffect(() => {
     checkTenzies();
   }, [dice])
+
+  React.useEffect(() =>{
+    let interval = null;
+
+    if(timerOn){
+      interval = setInterval(() => {
+        setTime(prevTime => prevTime + TIMER_INTERVAL)
+      }, 10)
+    }
+    else{
+      clearInterval(interval)
+    }
+
+    return () => clearInterval(interval)
+  }, [timerOn])
 
   //Loads a new set of dice 
   function newDice(){
@@ -40,12 +60,14 @@ function App() {
   
   //Set to a new game state
   function newGame(){
-    setDice(newDice());
+    setTime(0)
+    setDice(newDice())
     setTenzies(false)
   }
 
   //Checks and sets if tenzies is achieved
   function checkTenzies(){
+    setTimerOn(!dice.every((die) => die.value === dice[0].value && die.held === true))
     setTenzies(dice.every((die) => die.value === dice[0].value && die.held === true))
   }
 
@@ -71,6 +93,11 @@ function App() {
         {diceElements}
       </div>
       <button className="roll" onClick={tenzies ? newGame : rollDice}>{tenzies ? "New Game" : "Roll"}</button>
+      <br />
+      <h3>{time >= 60000 ? 
+      `${Math.floor((time/60000).toFixed(0))}:${time/1000 % 60 >= 10 ? `${(time/1000%60).toFixed(1)}` : `0${(time/1000%60).toFixed(1)}`}` : 
+      `${(time/1000).toFixed(1)}`
+      }</h3>
     </main>
   );
 }
