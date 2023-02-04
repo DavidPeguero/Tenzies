@@ -7,6 +7,7 @@ function App() {
   const TIMER_INTERVAL = 10;
   const [dice, setDice] = React.useState(() => newDice())
   const [tenzies, setTenzies] = React.useState(false)
+  const [bestTime, setBestTime] = (React.useState(JSON.parse(localStorage.getItem("bestTime")) || 0))
 
   //Timer states
   const [time, setTime] = React.useState(0)
@@ -23,7 +24,7 @@ function App() {
     if(timerOn){
       interval = setInterval(() => {
         setTime(prevTime => prevTime + TIMER_INTERVAL)
-      }, 10)
+      }, TIMER_INTERVAL)
     }
     else{
       clearInterval(interval)
@@ -60,6 +61,16 @@ function App() {
   
   //Set to a new game state
   function newGame(){
+    if(time < bestTime && tenzies){
+      localStorage.setItem("bestTime", JSON.stringify(time))  
+      setBestTime(JSON.parse(localStorage.getItem("bestTime")))
+    }
+    setTime(0)
+    setDice(newDice())
+    setTenzies(false)
+  }
+
+  function restart(){
     setTime(0)
     setDice(newDice())
     setTenzies(false)
@@ -87,6 +98,10 @@ function App() {
   return (
     <main>
       {tenzies && <Confetti></Confetti>}
+      <div className="header">
+        <button className="reset" onClick={restart}>Restart Game</button>
+        <h4 className="personal-best">Personal Best: {(bestTime/60000).toFixed(0)}:{(bestTime/1000%60).toFixed(0)}</h4>
+      </div>
       <h1 className="game-title">Tenzies</h1>
       <p className="game-text">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
       <div className="die-container">
@@ -94,8 +109,8 @@ function App() {
       </div>
       <button className="roll" onClick={tenzies ? newGame : rollDice}>{tenzies ? "New Game" : "Roll"}</button>
       <br />
-      <h3>{time >= 60000 ? 
-      `${Math.floor((time/60000).toFixed(0))}:${time/1000 % 60 >= 10 ? `${(time/1000%60).toFixed(1)}` : `0${(time/1000%60).toFixed(1)}`}` : 
+      <h3 className="timer">{time >= 60000 ? 
+      `${(time/60000).toFixed(0)}:${time/1000 % 60 >= 10 ? `${(time/1000%60).toFixed(1)}` : `0${(time/1000%60).toFixed(1)}`}` : 
       `${(time/1000).toFixed(1)}`
       }</h3>
     </main>

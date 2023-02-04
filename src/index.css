@@ -10,14 +10,46 @@ body {
 
 main {
   display: flex;
+  position: relative;
   flex-direction: column;
-  margin: 30px 20px;
+  margin: 20px 20px;
   background: #0B2434;
   height: 90vh;
   background: #F5F5F5;
   border-radius: 10px;
-  padding: 3% 5% 3% 5%;
+  padding: .5% 3% 3% 3%;
   align-items: center;
+}
+
+.header{
+  width: 100%;
+  display: flex;
+  margin-bottom: 2.5%;
+  align-items: center;
+}
+
+.reset{
+  display: flex;
+  margin: top 1px;
+  width: 100px;
+  height: 30px;
+  font-weight: 700;
+  font-size: .8rem;
+
+  background: blueviolet;
+  color : white;
+  border: none;
+  border-radius: 10px;
+
+  justify-content: center;
+  align-items: center;
+  
+  cursor: pointer;
+}
+
+.personal-best{
+  display: flex;
+  margin-left: auto;
 }
 
 .game-title{
@@ -59,7 +91,7 @@ main {
 
 .roll{
   display: flex;
-  margin-top: 3%;
+  margin-top: 5%;
   width: 120px;
   height: 50px;
   font-weight: 700;
@@ -74,6 +106,17 @@ main {
   align-items: center;
   
   cursor: pointer;
+}
+
+.timer{
+  display: flex;
+  margin-top: 3%;
+  width: 120px;
+  height: 50px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  justify-content: center;
+  align-items: center;
 }
 
 .roll:focus{
