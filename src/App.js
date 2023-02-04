@@ -3,10 +3,12 @@ import React from "react"
 import Confetti from 'react-confetti'
 
 function App() {
-  const DIE_NUM = 10;
+  const DIE_NUM = 3;
   const TIMER_INTERVAL = 10;
   const [dice, setDice] = React.useState(() => newDice())
   const [tenzies, setTenzies] = React.useState(false)
+
+  //Personal Best 
   const [bestTime, setBestTime] = (React.useState(JSON.parse(localStorage.getItem("bestTime")) || 0))
 
   //Timer states
@@ -16,6 +18,7 @@ function App() {
   //Check for win condition and set win if achieved
   React.useEffect(() => {
     checkTenzies();
+    
   }, [dice])
 
   React.useEffect(() =>{
@@ -61,10 +64,6 @@ function App() {
   
   //Set to a new game state
   function newGame(){
-    if(time < bestTime || bestTime == 0){
-      localStorage.setItem("bestTime", JSON.stringify(time))  
-      setBestTime(JSON.parse(localStorage.getItem("bestTime")))
-    }
     setTime(0)
     setDice(newDice())
     setTenzies(false)
@@ -78,8 +77,13 @@ function App() {
 
   //Checks and sets if tenzies is achieved
   function checkTenzies(){
-    setTimerOn(!dice.every((die) => die.value === dice[0].value && die.held === true))
-    setTenzies(dice.every((die) => die.value === dice[0].value && die.held === true))
+    let win = dice.every((die) => die.value === dice[0].value && die.held === true)
+    setTimerOn(!win)
+    setTenzies(win)
+    if(win && (time < bestTime || bestTime == 0)){
+      localStorage.setItem("bestTime", JSON.stringify(time))  
+      setBestTime(JSON.parse(localStorage.getItem("bestTime")))
+    }
   }
 
   //Create dice elements on dice change
@@ -101,7 +105,7 @@ function App() {
       {tenzies && <Confetti></Confetti>}
       <div className="header">
         <button className="reset" onClick={restart}>Restart Game</button>
-        <h4 className="personal-best">Personal Best: {(bestTime/60000).toFixed(0)}:{(bestTime/1000%60) >= 10 ? (bestTime/1000%60).toFixed(0) : `0${(bestTime/1000%60).toFixed(0)}`}</h4>
+        <h4 className="personal-best">Personal Best: {(bestTime/60000).toFixed(0)}:{(bestTime/1000%60) >= 10 ? (bestTime/1000%60).toFixed(0) : `0${(bestTime/1000%60).toFixed(1)}`}</h4>
       </div>
       <h1 className="game-title">Tenzies</h1>
       <p className="game-text">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
