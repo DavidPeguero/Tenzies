@@ -3,7 +3,7 @@ import React from "react"
 import Confetti from 'react-confetti'
 
 function App() {
-  const DIE_NUM = 3;
+  const DIE_NUM = 10;
   const TIMER_INTERVAL = 10;
   const [dice, setDice] = React.useState(() => newDice())
   const [tenzies, setTenzies] = React.useState(false)
